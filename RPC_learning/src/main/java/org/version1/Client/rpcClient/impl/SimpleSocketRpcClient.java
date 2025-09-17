@@ -12,10 +12,12 @@ import java.net.Socket;
 public class SimpleSocketRpcClient implements RpcClient {
     private String host;//主机地址
     private int port;//端口号
+
     public SimpleSocketRpcClient(String host,int port){
         this.host=host;
         this.port=port;
     }
+
     @Override
     public RpcResponse sendRequest(RpcRequest request){
         try {

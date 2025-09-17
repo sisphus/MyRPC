@@ -7,9 +7,9 @@ import org.version1.common.service.UserService;
 public class TestClient {
     public static void main(String[] args) {
         //创建 ClientProxy 对象：初始化 ClientProxy 对象，连接到指定的服务器地址和端口。
-        ClientProxy clientProxy = new ClientProxy("127.0.0.1", 9999,0);
-
+        ClientProxy clientProxy=new ClientProxy();
         //获得UserService的代理对象
+        //内部改为通过动态服务发现机制（如 Zookeeper）获取服务端地址
         UserService proxy = clientProxy.getProxy(UserService.class);
         User user = proxy.getUserByUserId(1);
         System.out.println("从服务端得到的user="+user.toString());

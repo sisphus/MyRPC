@@ -18,19 +18,20 @@ public class ClientProxy implements InvocationHandler {
     //RPCClientProxy类中需要加入一个RPCClient类变量即可， 传入不同的client(simple,netty)
     // , 即可调用公共的接口sendRequest发送请求
     private RpcClient rpcClient;
-    public ClientProxy(String host,int port,int choose){
-        switch (choose){
-            case 0:
-                rpcClient=new NettyRpcClient(host,port);
-                break;
-            case 1:
-                rpcClient=new SimpleSocketRpcClient(host,port);
-        }
+//    public ClientProxy(String host,int port,int choose){
+//        switch (choose){
+//            case 0:
+//                rpcClient=new NettyRpcClient(host,port);
+//                break;
+//            case 1:
+//                rpcClient=new SimpleSocketRpcClient(host,port);
+//        }
+//    }
+
+    public ClientProxy(){
+        rpcClient=new NettyRpcClient();
     }
 
-    public ClientProxy(String host,int port){
-        rpcClient=new NettyRpcClient(host,port);
-    }
 
     //jdk动态代理，每一次代理对象调用方法，都会经过此方法增强（反射获取request对象，socket发送到服务端）
     //核心逻辑，用于封装请求并处理服务端响应。
