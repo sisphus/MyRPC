@@ -35,9 +35,12 @@ public class ZKServiceCenter implements ServiceCenter{
     @Override
     public InetSocketAddress serviceDiscovery(String serviceName) {
         try {
-            List<String> strings = client.getChildren().forPath("/" + serviceName);
+            List<String> children = client.getChildren().forPath("/" + serviceName);
+            if (children == null || children.isEmpty()) {
+                throw new RuntimeException("没有可用的服务实例: " + serviceName);
+            }
             // 这里默认用的第一个，后面加负载均衡
-            String string = strings.get(0);
+            String string = children.get(0);
             return parseAddress(string);
         } catch (Exception e) {
             e.printStackTrace();

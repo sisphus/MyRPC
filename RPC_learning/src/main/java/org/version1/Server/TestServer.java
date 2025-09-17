@@ -10,15 +10,17 @@ import org.version1.common.service.impl.UserServiceImpl;
 public class TestServer {
     public static void main(String[] args) {
 
+        String host = "127.0.0.1";
+        int port = 9999;
+
         UserService userService = new UserServiceImpl();
 
-        ServiceProvider serviceProvider = new ServiceProvider("127.0.0.1",9999);
+        ServiceProvider serviceProvider = new ServiceProvider(host, port);
         //register service
         serviceProvider.provideServiceInterface(userService);
         //instantiate service
         RpcServer rpcServer=new NettyRPCRPCServer(serviceProvider);
 
-        rpcServer.start(9999);
-
+        rpcServer.start(port);
     }
 }

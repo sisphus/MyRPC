@@ -53,6 +53,7 @@ public class ZKServiceRegister implements ServiceRegister {
         } catch (Exception e) {
             System.out.println("此服务已存在");
         }
+        System.out.println("注册完成");
     }
     // 地址 -> XXX.XXX.XXX.XXX:port 字符串
     private String getServiceAddress(InetSocketAddress serverAddress) {

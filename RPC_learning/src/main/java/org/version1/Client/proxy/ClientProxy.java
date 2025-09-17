@@ -18,15 +18,7 @@ public class ClientProxy implements InvocationHandler {
     //RPCClientProxy类中需要加入一个RPCClient类变量即可， 传入不同的client(simple,netty)
     // , 即可调用公共的接口sendRequest发送请求
     private RpcClient rpcClient;
-//    public ClientProxy(String host,int port,int choose){
-//        switch (choose){
-//            case 0:
-//                rpcClient=new NettyRpcClient(host,port);
-//                break;
-//            case 1:
-//                rpcClient=new SimpleSocketRpcClient(host,port);
-//        }
-//    }
+
 
     public ClientProxy(){
         rpcClient=new NettyRpcClient();

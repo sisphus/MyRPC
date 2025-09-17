@@ -15,6 +15,8 @@ import org.version1.Client.serviceCenter.ZKServiceCenter;
 import org.version1.common.Message.RpcRequest;
 import org.version1.common.Message.RpcResponse;
 
+import java.net.InetSocketAddress;
+
 public class NettyRpcClient implements RpcClient {
 
     private String host;
@@ -40,7 +42,10 @@ public class NettyRpcClient implements RpcClient {
 
     @Override
     public RpcResponse sendRequest(RpcRequest request) {
-
+        //从注册中心获取host,post
+        InetSocketAddress address = serviceCenter.serviceDiscovery(request.getInterfaceName());
+        host = address.getHostName();
+        port = address.getPort();
         try {
             //创建一个channelFuture对象，代表这一个操作事件，sync方法表示堵塞直到connect完成
             ChannelFuture channelFuture  = bootstrap.connect(host, port).sync();
