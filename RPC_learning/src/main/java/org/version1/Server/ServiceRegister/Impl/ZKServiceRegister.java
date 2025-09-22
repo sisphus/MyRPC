@@ -51,7 +51,8 @@ public class ZKServiceRegister implements ServiceRegister {
                     .withMode(CreateMode.EPHEMERAL)
                     .forPath(path);
         } catch (Exception e) {
-            System.out.println("此服务已存在");
+            e.printStackTrace();  // 打印具体错误
+            throw new RuntimeException("服务注册失败: " + serviceName, e);
         }
         System.out.println("注册完成");
     }
