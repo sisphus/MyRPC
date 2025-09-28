@@ -17,7 +17,7 @@ public class TestServer {
 
         ServiceProvider serviceProvider = new ServiceProvider(host, port);
         //register service
-        serviceProvider.provideServiceInterface(userService);
+        serviceProvider.provideServiceInterface(userService,true);
         //instantiate service
         RpcServer rpcServer=new NettyRPCRPCServer(serviceProvider);
 

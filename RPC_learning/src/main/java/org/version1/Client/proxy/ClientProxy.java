@@ -2,9 +2,12 @@ package org.version1.Client.proxy;
 
 import lombok.AllArgsConstructor;
 import org.version1.Client.IOClient;
+import org.version1.Client.retry.guavaRetry;
 import org.version1.Client.rpcClient.RpcClient;
 import org.version1.Client.rpcClient.impl.NettyRpcClient;
 import org.version1.Client.rpcClient.impl.SimpleSocketRpcClient;
+import org.version1.Client.serviceCenter.ServiceCenter;
+import org.version1.Client.serviceCenter.ZKServiceCenter;
 import org.version1.common.Message.RpcRequest;
 import org.version1.common.Message.RpcResponse;
 
@@ -19,9 +22,11 @@ public class ClientProxy implements InvocationHandler {
     // , 即可调用公共的接口sendRequest发送请求
     private RpcClient rpcClient;
 
+    private ServiceCenter serviceCenter;
 
     public ClientProxy() throws InterruptedException{
         rpcClient=new NettyRpcClient();
+        serviceCenter=new ZKServiceCenter();
     }
 
 
@@ -37,6 +42,16 @@ public class ClientProxy implements InvocationHandler {
                 .build();
         //与服务端进行通信，将请求发送出去，并接收 RpcResponse 响应。
         RpcResponse response= rpcClient.sendRequest(request);
+
+        //后续添加逻辑：为保持幂等性，只对白名单上的服务进行重试
+        if (serviceCenter.checkRetry(request.getInterfaceName())){
+            //调用retry框架进行重试操作
+            response=new guavaRetry().sendServiceWithRetry(request,rpcClient);
+        }else {
+            //只调用一次
+            response= rpcClient.sendRequest(request);
+        }
+
         //获取服务端返回的结果，并返回给调用者。
         return response.getData();
         }
