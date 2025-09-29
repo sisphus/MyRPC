@@ -2,6 +2,7 @@ package org.version1.Server.provider;
 
 import org.version1.Server.ServiceRegister.Impl.ZKServiceRegister;
 import org.version1.Server.ServiceRegister.ServiceRegister;
+import org.version1.Server.ratelimit.provider.RateLimitProvider;
 
 import java.net.InetSocketAddress;
 import java.util.HashMap;
@@ -17,12 +18,16 @@ public class ServiceProvider {
     private ServiceRegister serviceRegister;
 
 
+    //限流器
+    private RateLimitProvider rateLimitProvider;
+
     public ServiceProvider(String host,int port){
         //需要传入服务端自身的网络地址
         this.host=host;
         this.port=port;
         this.interfaceProvider=new HashMap<>();
         this.serviceRegister=new ZKServiceRegister();
+        this.rateLimitProvider=new RateLimitProvider();
     }
 
     //本地注册服务
@@ -48,4 +53,9 @@ public class ServiceProvider {
     {
         return interfaceProvider.get(interfaceName);
     }
+    //获取限流器
+    public RateLimitProvider getRateLimitProvider(){
+        return rateLimitProvider;
+    }
+
 }
